@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mane Ruchi Foods</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>Mane Ruchi – Taste of Home</h1>
+    <p>Fresh Homemade Batter Delivered Daily</p>
+</header>
+
+<!-- HERO WITH SLIDER -->
+<section class="hero">
+    <div class="slider">
+        <img src="Plain-Dosa.webp" class="slide active">
+        <img src="Idli.jpg" class="slide">
+        <img src="Pesarattu.jpg" class="slide">
+        <img src="millet-dosa-5.jpg" class="slide">
+    </div>
+
+    <div class="hero-text">
+        <h2>Fresh | Hygienic | No Preservatives</h2>
+        <p>Soft Idlis & Crispy Dosas at Your Home</p>
+    </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products">
+<h2>Our Fresh Products</h2>
+
+<div class="products-container">
+
+<div class="product-card">
+    <img src="Plain-Dosa.webp">
+    <h3>Dosa Batter</h3>
+    <p>₹60</p>
+    <div class="qty">
+        <button onclick="changeQty('dosa', -1)">-</button>
+        <span id="dosa">1</span>
+        <button onclick="changeQty('dosa', 1)">+</button>
+    </div>
+    <button onclick="orderNow('Dosa Batter',60,'dosa')" class="btn">Order</button>
+</div>
+
+<div class="product-card">
+    <img src="Idli.jpg">
+    <h3>Idli Batter</h3>
+    <p>₹70</p>
+    <div class="qty">
+        <button onclick="changeQty('idli', -1)">-</button>
+        <span id="idli">1</span>
+        <button onclick="changeQty('idli', 1)">+</button>
+    </div>
+    <button onclick="orderNow('Idli Batter',70,'idli')" class="btn">Order</button>
+</div>
+
+<div class="product-card">
+    <img src="Pesarattu.jpg">
+    <h3>Pesarattu Batter</h3>
+    <p>₹99</p>
+    <div class="qty">
+        <button onclick="changeQty('pesarattu', -1)">-</button>
+        <span id="pesarattu">1</span>
+        <button onclick="changeQty('pesarattu', 1)">+</button>
+    </div>
+    <button onclick="orderNow('Pesarattu Batter',99,'pesarattu')" class="btn">Order</button>
+</div>
+
+<div class="product-card">
+    <img src="millet-dosa-5.jpg">
+    <h3>Millets Batter</h3>
+    <p>₹99</p>
+    <div class="qty">
+        <button onclick="changeQty('millets', -1)">-</button>
+        <span id="millets">1</span>
+        <button onclick="changeQty('millets', 1)">+</button>
+    </div>
+    <button onclick="orderNow('Millets Batter',99,'millets')" class="btn">Order</button>
+</div>
+
+</div>
+</section>
+
+<!-- PAYMENT -->
+<section class="payment">
+<h2>Pay via UPI</h2>
+<img src="your-qr.png" width="200">
+<p>Scan & Pay</p>
+</section>
+
+<!-- CONTACT -->
+<section class="contact">
+<h2>Contact</h2>
+<p>📞 8105835995</p>
+<p>📍 Bangalore</p>
+</section>
+
+<footer>
+<p>© 2026 Mane Ruchi Foods</p>
+</footer>
+
+<!-- SCRIPT -->
+<script>
+let slides = document.querySelectorAll(".slide");
+let index = 0;
+
+setInterval(() => {
+    slides[index].classList.remove("active");
+    index = (index + 1) % slides.length;
+    slides[index].classList.add("active");
+}, 3000);
+
+function changeQty(id, change) {
+    let el = document.getElementById(id);
+    let value = parseInt(el.innerText);
+    value = Math.max(1, value + change);
+    el.innerText = value;
+}
+
+function orderNow(product, price, id) {
+    let qty = document.getElementById(id).innerText;
+    let total = qty * price;
+
+    let msg = `Order Details:\nProduct: ${product}\nQuantity: ${qty}\nTotal: ₹${total}\nAddress: \nDelivery Time:`;
+
+    window.open(`https://wa.me/918105835995?text=${encodeURIComponent(msg)}`);
+}
+</script>
+
+</body>
+</html>
