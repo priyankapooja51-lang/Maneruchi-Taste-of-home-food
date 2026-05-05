@@ -10,23 +10,22 @@
 <body>
 
 <header>
-    <h1>Mane Ruchi – Taste of Home</h1>
-    <p>Fresh Homemade Batter Delivered Daily</p>
+  <h1>Mane Ruchi – Taste of Home</h1>
+  <p>Fresh Homemade Batter Delivered Daily</p>
 </header>
 
-<!-- HERO WITH SLIDER -->
+<!-- HERO -->
 <section class="hero">
-    <div class="slider">
-        <img src="Plain-Dosa.webp" class="slide active">
-        <img src="Idli.jpg" class="slide">
-        <img src="Pesarattu.jpg" class="slide">
-        <img src="millet-dosa-5.jpg" class="slide">
-    </div>
+  <div class="slider">
+    <img src="Plain-Dosa.webp" class="slide active">
+    <img src="Idli.jpg" class="slide">
+    <img src="Pesarattu.jpg" class="slide">
+    <img src="millet-dosa-5.jpg" class="slide">
+  </div>
 
-    <div class="hero-text">
-        <h2>Fresh | Hygienic | No Preservatives</h2>
-        <p>Soft Idlis & Crispy Dosas at Your Home</p>
-    </div>
+  <div class="hero-text">
+    <h2>Fresh | Hygienic | No Preservatives</h2>
+  </div>
 </section>
 
 <!-- PRODUCTS -->
@@ -36,100 +35,137 @@
 <div class="products-container">
 
 <div class="product-card">
-    <img src="Plain-Dosa.webp">
-    <h3>Dosa Batter</h3>
-    <p>₹60</p>
-    <div class="qty">
-        <button onclick="changeQty('dosa', -1)">-</button>
-        <span id="dosa">1</span>
-        <button onclick="changeQty('dosa', 1)">+</button>
-    </div>
-    <button onclick="orderNow('Dosa Batter',60,'dosa')" class="btn">Order</button>
+  <img src="Plain-Dosa.webp">
+  <h3>Dosa Batter</h3>
+  <p>₹60</p>
+  <button onclick="addToCart('Dosa Batter',60)" class="btn">Add to Cart</button>
 </div>
 
 <div class="product-card">
-    <img src="Idli.jpg">
-    <h3>Idli Batter</h3>
-    <p>₹70</p>
-    <div class="qty">
-        <button onclick="changeQty('idli', -1)">-</button>
-        <span id="idli">1</span>
-        <button onclick="changeQty('idli', 1)">+</button>
-    </div>
-    <button onclick="orderNow('Idli Batter',70,'idli')" class="btn">Order</button>
+  <img src="Idli.jpg">
+  <h3>Idli Batter</h3>
+  <p>₹70</p>
+  <button onclick="addToCart('Idli Batter',70)" class="btn">Add to Cart</button>
 </div>
 
 <div class="product-card">
-    <img src="Pesarattu.jpg">
-    <h3>Pesarattu Batter</h3>
-    <p>₹99</p>
-    <div class="qty">
-        <button onclick="changeQty('pesarattu', -1)">-</button>
-        <span id="pesarattu">1</span>
-        <button onclick="changeQty('pesarattu', 1)">+</button>
-    </div>
-    <button onclick="orderNow('Pesarattu Batter',99,'pesarattu')" class="btn">Order</button>
+  <img src="Pesarattu.jpg">
+  <h3>Pesarattu Batter</h3>
+  <p>₹99</p>
+  <button onclick="addToCart('Pesarattu Batter',99)" class="btn">Add to Cart</button>
 </div>
 
 <div class="product-card">
-    <img src="millet-dosa-5.jpg">
-    <h3>Millets Batter</h3>
-    <p>₹99</p>
-    <div class="qty">
-        <button onclick="changeQty('millets', -1)">-</button>
-        <span id="millets">1</span>
-        <button onclick="changeQty('millets', 1)">+</button>
-    </div>
-    <button onclick="orderNow('Millets Batter',99,'millets')" class="btn">Order</button>
+  <img src="millet-dosa-5.jpg">
+  <h3>Millets Batter</h3>
+  <p>₹99</p>
+  <button onclick="addToCart('Millets Batter',99)" class="btn">Add to Cart</button>
 </div>
 
 </div>
 </section>
 
-<!-- PAYMENT -->
-<section class="payment">
-<h2>Pay via UPI</h2>
-<img src="your-qr.png" width="200">
-<p>Scan & Pay</p>
-</section>
+<!-- CART PANEL -->
+<div class="cart" id="cart">
+<h3>Your Cart</h3>
+<div id="cart-items"></div>
 
-<!-- CONTACT -->
-<section class="contact">
-<h2>Contact</h2>
-<p>📞 8105835995</p>
-<p>📍 Bangalore</p>
-</section>
+<p><b>Total: ₹<span id="total">0</span></b></p>
+
+<label>Delivery Slot:</label>
+<select id="slot">
+  <option>Morning (7–10 AM)</option>
+  <option>Afternoon (12–3 PM)</option>
+  <option>Evening (5–8 PM)</option>
+</select>
+
+<br><br>
+
+<button onclick="placeOrder()" class="btn">Order via WhatsApp</button>
+<button onclick="payUPI()" class="btn pay">Pay via UPI</button>
+</div>
+
+<!-- FLOAT CART BUTTON -->
+<button class="cart-btn" onclick="toggleCart()">🛒</button>
 
 <footer>
 <p>© 2026 Mane Ruchi Foods</p>
 </footer>
 
-<!-- SCRIPT -->
 <script>
+let cart = [];
+
+function addToCart(name, price){
+  let item = cart.find(i => i.name === name);
+  if(item){
+    item.qty++;
+  } else {
+    cart.push({name, price, qty:1});
+  }
+  updateCart();
+}
+
+function updateCart(){
+  let cartDiv = document.getElementById("cart-items");
+  let total = 0;
+  cartDiv.innerHTML = "";
+
+  cart.forEach(item=>{
+    total += item.price * item.qty;
+
+    cartDiv.innerHTML += `
+      <div>
+        ${item.name} x ${item.qty}
+        <button onclick="changeQty('${item.name}',1)">+</button>
+        <button onclick="changeQty('${item.name}',-1)">-</button>
+      </div>
+    `;
+  });
+
+  document.getElementById("total").innerText = total;
+}
+
+function changeQty(name, change){
+  let item = cart.find(i => i.name === name);
+  if(!item) return;
+  item.qty += change;
+  if(item.qty <= 0){
+    cart = cart.filter(i=>i.name!==name);
+  }
+  updateCart();
+}
+
+function toggleCart(){
+  document.getElementById("cart").classList.toggle("show");
+}
+
+function placeOrder(){
+  let slot = document.getElementById("slot").value;
+  let msg = "Order Details:\n";
+
+  cart.forEach(item=>{
+    msg += `${item.name} x ${item.qty}\n`;
+  });
+
+  msg += `Delivery Slot: ${slot}`;
+
+  window.open(`https://wa.me/918105835995?text=${encodeURIComponent(msg)}`);
+}
+
+function payUPI(){
+  let total = document.getElementById("total").innerText;
+  let upi = `upi://pay?pa=yourupi@okaxis&pn=ManeRuchi&am=${total}&cu=INR`;
+  window.location.href = upi;
+}
+
+/* SLIDER */
 let slides = document.querySelectorAll(".slide");
 let index = 0;
-
-setInterval(() => {
-    slides[index].classList.remove("active");
-    index = (index + 1) % slides.length;
-    slides[index].classList.add("active");
-}, 3000);
-
-function changeQty(id, change) {
-    let el = document.getElementById(id);
-    let value = parseInt(el.innerText);
-    value = Math.max(1, value + change);
-    el.innerText = value;
-}
-
-function orderNow(product, price, id) {
-    let qty = document.getElementById(id).innerText;
-    let total = qty * price;
-
-    let msg = `Order Details:\nProduct: ${product}\nQuantity: ${qty}\nTotal: ₹${total}\nAddress: \nDelivery Time:`;
-
-    window.open(`https://wa.me/918105835995?text=${encodeURIComponent(msg)}`);
-}
+setInterval(()=>{
+  slides[index].classList.remove("active");
+  index = (index+1)%slides.length;
+  slides[index].classList.add("active");
+},3000);
 </script>
 
 </body>
