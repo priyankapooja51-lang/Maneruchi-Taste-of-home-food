@@ -149,6 +149,12 @@ function placeOrder(){
 
   msg += `Delivery Slot: ${slot}`;
 
+  // SAVE ORDER
+  let orders = JSON.parse(localStorage.getItem("orders")) || [];
+  orders.push({details: msg});
+  localStorage.setItem("orders", JSON.stringify(orders));
+
+  // WHATSAPP
   window.open(`https://wa.me/918105835995?text=${encodeURIComponent(msg)}`);
 }
 
