@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Panel</title>
+<style>
+body {font-family: Arial; padding:20px;}
+.order {
+  border:1px solid gray;
+  padding:10px;
+  margin:10px 0;
+}
+button {margin:5px;}
+</style>
+</head>
+
+<body>
+
+<h2>📦 Orders Dashboard</h2>
+
+<div id="orders"></div>
+
+<script>
+function loadOrders(){
+  let orders = JSON.parse(localStorage.getItem("orders")) || [];
+  let container = document.getElementById("orders");
+  container.innerHTML = "";
+
+  orders.forEach((order,index)=>{
+    container.innerHTML += `
+      <div class="order">
+        <p>${order.details}</p>
+        <button onclick="markDone(${index})">✅ Delivered</button>
+        <button onclick="deleteOrder(${index})">❌ Delete</button>
+      </div>
+    `;
+  });
+}
+
+function markDone(i){
+  let orders = JSON.parse(localStorage.getItem("orders"));
+  orders[i].details += " (Delivered)";
+  localStorage.setItem("orders", JSON.stringify(orders));
+  loadOrders();
+}
+
+function deleteOrder(i){
+  let orders = JSON.parse(localStorage.getItem("orders"));
+  orders.splice(i,1);
+  localStorage.setItem("orders", JSON.stringify(orders));
+  loadOrders();
+}
+
+loadOrders();
+</script>
+
+</body>
+</html>
